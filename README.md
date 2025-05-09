@@ -7,7 +7,7 @@ Built as a showcase of how data science can save insurers $$ by triaging high‑
 
 ---
 
-## 📈 Key Features
+## Key Features
 | Stage | What it does | Tech |
 |-------|--------------|------|
 | **Data prep** | Cleans & joins 188 k rows of anonymised auto‑claim data (Kaggle “Allstate Claims Severity”) | `pandas`, `pyarrow` |
