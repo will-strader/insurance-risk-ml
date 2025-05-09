@@ -1,0 +1,18 @@
+name: insurance-risk-ml
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10  
+  - pandas
+  - numpy
+  - scikit-learn
+  - lightgbm
+  - optuna
+  - shap
+  - streamlit
+  - pyarrow
+  - jupyterlab
+  - ipykernel
+  - pip
+  - pip:
+      - pre-commit

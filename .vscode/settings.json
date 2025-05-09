@@ -1,0 +1,4 @@
+{
+    "python.analysis.extraPaths": ["src"],
+    "python.analysis.typeCheckingMode": "basic"
+} // This is put in to avoid type checking errors with imports

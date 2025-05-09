@@ -1,0 +1,16 @@
+data:
+  raw: "data/raw/train.csv"
+  processed: "data/processed/claims.parquet"
+
+model:
+  target: "Claim_Amount"
+  test_size: 0.2
+  random_state: 42
+  n_estimators: 600
+  learning_rate: 0.05
+  max_depth: -1
+
+output:
+  model_path: "models/lightgbm_model.txt"
+  metrics_path: "models/metrics.json"
+  

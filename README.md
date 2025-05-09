@@ -10,7 +10,7 @@ Built as a showcase of how data science can save insurers on costs by triaging h
 ## Key Features
 | Stage | What it does | Tech |
 |-------|--------------|------|
-| **Data prep** | Cleans & joins 188 k rows of anonymised auto‑claim data (Kaggle “Allstate Claims Severity”) | `pandas`, `pyarrow` |
+| **Data prep** | Cleans & joins 188k rows of anonymised auto‑claim data (Kaggle “Allstate Claims Severity”) | `pandas`, `pyarrow` |
 | **Feature engineering** | Target encoding, interaction terms, holiday flags | `scikit‑learn`, `category_encoders` |
 | **Model** | Gradient‑boosted trees (LightGBM) with Bayesian hyper‑tuning | `lightgbm`, `optuna` |
 | **Explainability** | Global & local SHAP values with plain‑English summaries | `shap` |
@@ -21,7 +21,7 @@ Built as a showcase of how data science can save insurers on costs by triaging h
 
 ## Quick Start
 
-```bash
+```zsh
 # 1. Clone repo & install
 git clone https://github.com/<your‑handle>/insurance-risk-ml.git
 cd insurance-risk-ml
