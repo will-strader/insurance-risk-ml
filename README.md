@@ -1,7 +1,7 @@
-# Insurance Risk ML 
+## Insurance Risk Machine Learning Model 
 
 Predict claim severity from raw policy & loss data, interpret the drivers, and surface insights in a one‑click Streamlit dashboard.  
-Built as a showcase of how data science can save insurers $$ by triaging high‑severity claims earlier and optimising reserving.
+Built as a showcase of how data science can save insurers on costs by triaging high‑severity claims earlier and optimizing reserving.
 
 ![Python](https://img.shields.io/badge/Python-3.9-blue) ![License](https://img.shields.io/badge/License-MIT-green)
 
