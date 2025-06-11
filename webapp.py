@@ -9,12 +9,16 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "replace‑with‑a‑random‑secret"
 
 # Load trained model and preprocessing pipeline
-MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "model.pkl"
-PIPELINE_PATH = Path(__file__).resolve().parent.parent / "models" / "pipeline.pkl"
-SAMPLE_CSV_PATH = Path(__file__).resolve().parent.parent / "data" / "raw" / "train.csv"
+BASE_DIR = Path(__file__).resolve().parent           # /home/site/wwwroot when deployed
+MODEL_PATH = BASE_DIR / "models" / "model.pkl"
+PIPELINE_PATH = BASE_DIR / "models" / "pipeline.pkl"
+TRAIN_CSV_PATH = BASE_DIR / "train.csv"            # small sample file placed alongside webapp.py
 
 if not MODEL_PATH.exists() or not PIPELINE_PATH.exists():
-    raise FileNotFoundError("Model or pipeline not found. Train the model first.")
+    raise FileNotFoundError(
+        "models/model.pkl or models/pipeline.pkl not found. "
+        "Make sure the 'models' folder is included in the deployment package."
+    )
 
 model = joblib.load(MODEL_PATH)
 pipeline = joblib.load(PIPELINE_PATH)
@@ -31,7 +35,7 @@ def index():
             df = pd.read_csv(csv_file)
         elif request.form.get("use_sample"):
             # User chose built‑in sample
-            df = pd.read_csv(SAMPLE_CSV_PATH)
+            df = pd.read_csv(TRAIN_CSV_PATH)
         else:
             flash("Please upload a CSV file or select the sample option.", "warning")
             return redirect(url_for("index"))
