@@ -1,66 +1,66 @@
-import streamlit as st
+from flask import Flask, request, render_template, redirect, url_for, send_file, flash
 import pandas as pd
+import numpy as np
 import joblib
 from pathlib import Path
+import io
 
-# Load trained model and feature pipeline
-model_path = Path("models/model.pkl")
-pipeline_path = Path("models/pipeline.pkl")
+app = Flask(__name__)
+app.config["SECRET_KEY"] = "replace‑with‑a‑random‑secret"
 
-if not model_path.exists() or not pipeline_path.exists():
-    st.error("Model or pipeline not found. Please train the model first.")
-    st.stop()
+# Load trained model and preprocessing pipeline
+MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "model.pkl"
+PIPELINE_PATH = Path(__file__).resolve().parent.parent / "models" / "pipeline.pkl"
+SAMPLE_CSV_PATH = Path(__file__).resolve().parent.parent / "data" / "raw" / "train.csv"
 
-model = joblib.load(model_path)
-pipeline = joblib.load(pipeline_path)
+if not MODEL_PATH.exists() or not PIPELINE_PATH.exists():
+    raise FileNotFoundError("Model or pipeline not found. Train the model first.")
 
-# Path to fallback sample data
-sample_csv_path = Path("data/raw/train.csv")
+model = joblib.load(MODEL_PATH)
+pipeline = joblib.load(PIPELINE_PATH)
 
-# App UI
-st.title("Insurance Claim Prediction Dashboard")
 
-st.markdown(
-    """
-    Upload a CSV file of policyholder data or use a sample file to get claim amount predictions.
-    """
-)
+@app.route("/", methods=["GET", "POST"])
+def index():
+    """Home page that accepts a file upload and returns predictions."""
+    if request.method == "POST":
+        # Check which option user selected
+        if "predict_file" in request.files and request.files["predict_file"].filename:
+            # User uploaded a custom CSV
+            csv_file = request.files["predict_file"]
+            df = pd.read_csv(csv_file)
+        elif request.form.get("use_sample"):
+            # User chose built‑in sample
+            df = pd.read_csv(SAMPLE_CSV_PATH)
+        else:
+            flash("Please upload a CSV file or select the sample option.", "warning")
+            return redirect(url_for("index"))
 
-# Upload or use sample
-uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-use_sample = st.checkbox("Use built-in sample file instead", value=False)
+        try:
+            # Transform features and predict
+            X_transformed = pipeline.transform(df)
+            preds = model.predict(X_transformed)
+            df["Predicted_Claim_Amount"] = preds
 
-# Load data
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.success("Custom file uploaded.")
-elif use_sample and sample_csv_path.exists():
-    df = pd.read_csv(sample_csv_path)
-    st.info("Using sample file: `train.csv`")
-else:
-    st.warning("Please upload a file or use the sample file.")
-    st.stop()
+            # Serialize predictions to CSV in‑memory for download link
+            buf = io.StringIO()
+            df.to_csv(buf, index=False)
+            buf.seek(0)
+            return send_file(
+                io.BytesIO(buf.getvalue().encode()),
+                mimetype="text/csv",
+                as_attachment=True,
+                download_name="predictions.csv",
+            )
+        except Exception as exc:
+            flash(f"Prediction failed: {exc}", "danger")
+            return redirect(url_for("index"))
 
-# Show preview
-st.subheader("Input Data Preview")
-st.write(df.head())
+    # GET request – render upload form
+    return render_template("index.html")
 
-# Run prediction
-try:
-    X_transformed = pipeline.transform(df)
-    predictions = model.predict(X_transformed)
-    df["Predicted_Claim_Amount"] = predictions
 
-    st.subheader("Predicted Claims")
-    st.write(df[["Predicted_Claim_Amount"]].head())
-
-    # Download button
-    st.download_button(
-        label="Download Full Predictions as CSV",
-        data=df.to_csv(index=False),
-        file_name="predictions.csv",
-        mime="text/csv",
-    )
-
-except Exception as e:
-    st.error(f"Prediction failed: {e}")
+if __name__ == "__main__":
+    # Note: In production (Azure App Service) you'll use gunicorn:
+    #   gunicorn app:app
+    app.run(host="0.0.0.0", port=5000, debug=True)
