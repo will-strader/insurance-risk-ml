@@ -14,5 +14,7 @@ dependencies:
   - jupyterlab
   - ipykernel
   - pip
+  - category_encoders
+  - gunicorn
   - pip:
       - pre-commit
