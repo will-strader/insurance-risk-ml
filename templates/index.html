@@ -39,11 +39,8 @@
     <form method="post" enctype="multipart/form-data">
       <label>Select CSV file with policyholder data:</label>
       <input type="file" name="predict_file" accept=".csv" />
+      <p style="font-size: 0.9rem; color: #d93025; margin-top: 0.5rem;">For best performance, keep file size under 50MB. Larger files may result in extended wait times.</p>
 
-      <label style="margin-top:1rem;">
-        <input type="checkbox" name="use_sample" value="true" />
-        Or use built-in sample data
-      </label>
 
       <button type="submit">Generate Predictions</button>
     </form>
