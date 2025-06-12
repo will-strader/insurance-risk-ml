@@ -1,35 +1,83 @@
-## Insurance Risk Machine Learning Model 
+# Insurance Claims Severity Predictor
 
-Predict claim severity from raw policy & loss data, interpret the drivers, and surface insights in a one‑click Streamlit dashboard.  
-Built as a showcase of how data science can save insurers on costs by triaging high‑severity claims earlier and optimizing reserving.
+A full-stack machine learning web application that predicts the severity of insurance claims using structured policyholder data. Built on Flask and deployed to Azure App Service with automated CI/CD using GitHub Actions.
 
-![Python](https://img.shields.io/badge/Python-3.9-blue) ![License](https://img.shields.io/badge/License-MIT-green)
+## 🔍 Project Overview
 
----
+This app utilizes a LightGBM-based regression model trained on the [Allstate Claims Severity dataset (Kaggle)](https://www.kaggle.com/c/allstate-claims-severity) to predict the monetary value of insurance claims. The web interface allows users to upload CSV files or test using a provided template.
 
-## Key Features
-| Stage | What it does | Tech |
-|-------|--------------|------|
-| **Data prep** | Cleans & joins 188k rows of anonymised auto‑claim data (Kaggle “Allstate Claims Severity”) | `pandas`, `pyarrow` |
-| **Feature engineering** | Target encoding, interaction terms, holiday flags | `scikit‑learn`, `category_encoders` |
-| **Model** | Gradient‑boosted trees (LightGBM) with Bayesian hyper‑tuning | `lightgbm`, `optuna` |
-| **Explainability** | Global & local SHAP values with plain‑English summaries | `shap` |
-| **Dashboard** | Upload a CSV to get severity prediction bands, driver plots, and what‑if sliders | `streamlit` |
-| **Deployment** | Dockerfile & GitHub Actions push to AWS ECR or Heroku | `docker`, `gh‑actions` |
+## Features
 
----
+- **Supervised ML Model**: Built using LightGBM and scikit-learn
+- **Feature Engineering**: Extensive preprocessing to handle 130+ categorical and continuous features
+- **Web App**: Developed using Flask, HTML/CSS, and JavaScript
+- **Real-time Inference**: Upload your CSV to generate predictions dynamically
+- **Azure Deployment**: Hosted on Azure App Service using a Basic B1 plan
+- **CI/CD**: Integrated with GitHub Actions for seamless updates
 
-## Quick Start
+## File Structure
+```
+insurance-risk-ml/
+│
+├── static/                   # Includes sample CSV data
+│   └── sample_data.csv
+│
+├── templates/               # HTML template for UI
+│   └── index.html
+│
+├── models/                  # Trained model artifacts
+│   ├── model.pkl
+│   ├── pipeline.pkl
+│   └── shap_summary.png
+│
+├── src/                     # Data pipeline and utilities
+│   ├── data/                # make_dataset.py for preprocessing
+│   ├── features/            # Feature engineering scripts
+│   ├── models/              # Training and prediction code
+│   └── utils/               # Logging tools
+│
+├── data/                    # Raw and processed datasets
+├── webapp.py                # Flask app
+├── requirements.txt         # Python dependencies
+└── README.md                # You're here!
+```
 
-```zsh
-# 1. Clone repo & install
-git clone https://github.com/<your‑handle>/insurance-risk-ml.git
+## Sample CSV Template
+Download a [CSV template](https://insurance-claims-severity-model-app-gdc8dyg7dub2hwc2.canadacentral-01.azurewebsites.net/static/sample_data.csv) to try the model with example input. For best results, keep files under 50MB.
+
+## Setup Instructions
+
+### Local Setup
+```bash
+git clone https://github.com/will-strader/insurance-risk-ml.git
 cd insurance-risk-ml
-conda env create -f environment.yml
-conda activate insurance-risk-ml
+pip install -r requirements.txt
+python webapp.py
+```
+Visit `http://localhost:5000` in your browser.
 
-# 2. Train model & evaluate
-python src/train.py --config configs/base.yaml
+### Azure Deployment
+1. Zip the repo root (include app.py, src/, models/, data/, templates/, static/)
+2. Deploy via Azure App Service
+3. Set app startup command: `gunicorn webapp:app --bind=0.0.0.0 --timeout 600`
+4. Configure GitHub Actions for CI/CD
 
-# 3. Launch dashboard
-streamlit run app/app.py
+## Model Details
+- LightGBM Regressor with 200+ features
+- Evaluation metric: Mean Absolute Error (MAE)
+- Tuned via GridSearchCV with early stopping
+
+## Technologies Used
+- Python, scikit-learn, LightGBM
+- Flask, HTML/CSS, JavaScript
+- Azure App Service, GitHub Actions
+
+## License
+MIT License
+
+## Author
+**Will Strader** – [GitHub](https://github.com/will-strader) | [LinkedIn](https://www.linkedin.com/in/william-strader-1a4879221/)
+
+---
+
+_Disclaimer: This application is for demonstration purposes and not production-grade for actual claim evaluation._
