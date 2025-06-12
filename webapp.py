@@ -67,7 +67,7 @@ def index():
 # Route to serve the sample CSV for download
 @app.route("/download-sample")
 def download_sample():
-    return send_from_directory("static", "sample_data.csv", as_attachment=True, mimetype="text/csv")
+    return send_from_directory("static", "Expanded_Sample.csv", as_attachment=True, mimetype="text/csv")
 
 
 if __name__ == "__main__":
