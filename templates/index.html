@@ -40,6 +40,9 @@
       <label>Select CSV file with policyholder data:</label>
       <input type="file" name="predict_file" accept=".csv" />
       <p style="font-size: 0.9rem; color: #d93025; margin-top: 0.5rem;">For best performance, keep file size under 50MB. Larger files may result in extended wait times.</p>
+      <p style="font-size: 0.9rem; margin-top: 1rem;">
+        <a href="{{ url_for('static', filename='train.csv') }}" download>Download CSV template</a>
+      </p>
 
 
       <button type="submit">Generate Predictions</button>
@@ -54,5 +57,8 @@
       loading.style.display = "block";
     });
   </script>
+  <p style="text-align:center; font-size: 0.85rem; color: #333; margin-top: 2rem;">
+    Note: Uploaded CSV must match the model's expected format. Headers and column types should align with training data.
+  </p>
 </body>
 </html>
