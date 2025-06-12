@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for, send_file, flash
+from flask import Flask, request, render_template, redirect, url_for, send_file, flash, send_from_directory
 import pandas as pd
 import numpy as np
 import joblib
@@ -62,6 +62,12 @@ def index():
 
     # GET request – render upload form
     return render_template("index.html")
+
+
+# Route to serve the sample CSV for download
+@app.route("/download-sample")
+def download_sample():
+    return send_from_directory("static", "sample_data.csv", as_attachment=True, mimetype="text/csv")
 
 
 if __name__ == "__main__":
