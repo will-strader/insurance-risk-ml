@@ -71,6 +71,6 @@ def download_sample():
 
 
 if __name__ == "__main__":
-    # Note: In production (Azure App Service) you'll use gunicorn:
+    # Note: In production, Azure App Service will use gunicorn:
     #   gunicorn app:app
     app.run(host="0.0.0.0", port=5000, debug=True)
