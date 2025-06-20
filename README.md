@@ -2,7 +2,7 @@
 
 A full-stack machine learning web application that predicts the severity of insurance claims using structured policyholder data. Built on Flask and deployed to Azure App Service with automated CI/CD using GitHub Actions.
 
-## 🔍 Project Overview
+## Project Overview
 
 This app utilizes a LightGBM-based regression model trained on the [Allstate Claims Severity dataset (Kaggle)](https://www.kaggle.com/c/allstate-claims-severity) to predict the monetary value of insurance claims. The web interface allows users to upload CSV files or test using a provided template.
 
